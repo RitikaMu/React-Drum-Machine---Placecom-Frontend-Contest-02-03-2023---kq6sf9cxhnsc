@@ -1,69 +1,91 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/App.css"
 import Pads from "./Pads";
 
 
 export const bank1 = {
-  'Q': {
+  Q: {
     name: 'Heater 1',
     source: 'https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3'
   },
-  'W': {
+  W: {
     name: 'Heater 2',
     source: 'https://s3.amazonaws.com/freecodecamp/drums/Heater-2.mp3'
   },
-  'E': {
+  E: {
     name: 'Heater 4',
     source: 'https://s3.amazonaws.com/freecodecamp/drums/Heater-4_1.mp3'
   },
-  'A': {
+  A: {
     name: 'Heater 3',
     source: 'https://s3.amazonaws.com/freecodecamp/drums/Heater-3.mp3'
   },
-  'S': {
+  S: {
     name: 'Clap',
     source: 'https://s3.amazonaws.com/freecodecamp/drums/Heater-6.mp3'
   },
-  'D': {
+  D: {
     name: 'Open Hi-Hat',
     source: 'https://s3.amazonaws.com/freecodecamp/drums/Dsc_Oh.mp3'
   },
-  'Z': {
+  Z: {
     name: 'Kick n Hat',
     source: 'https://s3.amazonaws.com/freecodecamp/drums/Kick_n_Hat.mp3'
   },
-  'X': {
+  X: {
     name: 'Kick',
     source: 'https://s3.amazonaws.com/freecodecamp/drums/RP4_KICK_1.mp3'
   },
-  'C': {
+  C: {
     name: 'Closed Hi-Hat',
     source: 'https://s3.amazonaws.com/freecodecamp/drums/Cev_H2.mp3'
   }
-}
+};
 
 
-function ControlScreen() {
+function ControlScreen({ volume, volumeHandler, on, onHandler}) {
   return (
     <div id='control-screen'>
       <label id='label-power'>
-        <input type='checkbox' id='power' />
-        <span className='checkmark'>Show Power of off here </span>
+        <input type='checkbox' id='power' onClick ={() => onHandler()} />
+        <span className='checkmark'>{ on ? "ON" : "OFF"}</span>
       </label>
       <label id='label-volume'>
-        <input type='range'  id='volume' />
-        <span id='volume-display'>Volume : Show volume here </span>
+        <input type='range' 
+               id='volume'
+               value={volume}
+               onChange={(e) => volumeHandler(e.target.value)}
+        />
+        <span id='volume-display'>Volume : {volume} </span>
       </label>
     </div>
-  )
+  );
 }
 
 function App() {
+  const [volume,setVolume] = useState(0);
+  const [on,setOn] = useState(false);
+  
+  const volumeHandler = (val) => {
+      setVolume(val);
+  };
+  
+  const onHandler = () => {
+    setOn(!on);
+  };
   return (
     <div id='drum-machine'>
       
-      <Pads/>
-      <ControlScreen  />
+      <Pads power={on} />
+      <br />
+      <br />
+      <br />
+      <ControlScreen
+        volume={volume}
+        volumeHandler={volumeHandler}
+        on={on}
+        onHandler={onHandler}
+      />
     </div>
   );
 }
